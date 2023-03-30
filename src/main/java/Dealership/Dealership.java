@@ -6,6 +6,7 @@ import Car.Diesel;
 import Car.Electric;
 import Car.Hybrid;
 import Car.Petrol;
+import Components.PartsProperties;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,6 @@ public class Dealership implements IBuy, ISell {
 
     private int money;
     ArrayList<Object> cars;
-
     ArrayList<Object> parts;
 
     public Dealership(int money, ArrayList<Object> cars, ArrayList<Object> parts){
@@ -39,11 +39,11 @@ public class Dealership implements IBuy, ISell {
     }
 
     public Object getparts(){
-        if (this.parts.size() <= 1){
-            return this.parts.get(0);
+        if (parts.size() <= 1){
+            return parts.get(0);
         }
         else{
-            return this.parts;
+            return parts;
         }
     }
 
@@ -67,19 +67,25 @@ public class Dealership implements IBuy, ISell {
         return "car not in stock";
     }
 
-//    public int hasPart(Object part){
-//        for (Object i : this.parts){
-//            if (i instanceof CarPart && i == part){
-//                return ((CarPart) i).price();
-//            }
-//        }
-//        return -1;
-//    }
-//
-//    public int repairVehicle(int amount, Dealership dealership){
-//        int partPrice = dealership.hasPart(part);
-//        return amount + partPrice;
-//    }
+    public boolean hasPart(PartsProperties part){
+        for (Object i : parts){
+            if (i.equals(part)){
+                return true;}
+        } return false;
+    }
+
+    public int getPartPrice(PartsProperties part){
+        if (hasPart(part) ){
+            return part.getPrice();
+        } else {
+            return 0;
+        }
+    }
+
+    public int repairVehicle(int amount, Dealership dealership, PartsProperties part){
+        int partPrice = dealership.getPartPrice(part);
+        return amount + partPrice;
+    }
 
 
 

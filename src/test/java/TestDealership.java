@@ -2,11 +2,13 @@ import Car.Diesel;
 import Car.Electric;
 import Car.Hybrid;
 import Car.Petrol;
+import Components.Springs;
 import Components.Turbos;
 import Dealership.Dealership;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -19,6 +21,7 @@ public class TestDealership {
     Electric electric;
     Hybrid hybrid;
     Turbos turbos;
+    Springs springs;
 
     @Before
     public void before(){
@@ -32,6 +35,7 @@ public class TestDealership {
         cars.add(petrol);
         cars.add(electric);
         turbos = new Turbos(300, 2);
+        springs = new Springs(100, 1);
         ArrayList<Object> parts = new ArrayList<>();
         parts.add(turbos);
         dealership = new Dealership(1000000, cars, parts);
@@ -59,17 +63,28 @@ public class TestDealership {
         assertEquals(9700, damageCost);
     }
 
-//    @Test
-//    public void testCanRepair(){
-//        int price = electric.getDamageCost();
-//        int damagedPrice = electric.ifHasDamage(price);
-//        dealership.hasPart(turbos);
-//        int fixed = dealership.repairVehicle(damagedPrice);
-//        assertEquals(10000, fixed);
-//    }
+    @Test
+    public void testCanRepair(){
+        int price = electric.getDamageCost();
+        int damagedCost = electric.ifHasDamage(price);
+        dealership.getPartPrice(turbos);
+        int fixed = dealership.repairVehicle(damagedCost, dealership, turbos);
+        assertEquals(10000, fixed);
+    }
 
     @Test
     public void testStockValue(){
         assertEquals(30000, dealership.stockValue());
+    }
+
+    @Test
+    public void testHasParts(){
+         boolean hasParts = dealership.hasPart(turbos);
+        assertEquals(true, hasParts);
+    }
+
+    @Test
+    public void testDoesntHaveParts(){
+        assertEquals(false, dealership.hasPart(springs));
     }
 }
